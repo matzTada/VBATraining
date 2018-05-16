@@ -1,0 +1,43 @@
+Sub CommaToRow()
+    Dim cr, ci, cn As Integer
+    Dim cst, tcl As String
+    Dim ctx As Variant
+    
+    Sheets("Sheet1").Select 'specify target sheet
+    tcl = "A" 'specify target column
+
+    For cr = Cells(Rows.Count, tcl).End(xlUp).Row To 1 Step -1
+        cst = Range(tcl & cr).Value
+        ctx = Split(cst, ",")
+        cn = UBound(ctx) + 1
+        'MsgBox cn 'used for debug and demonstration
+        If cn > 1 Then
+            Application.CutCopyMode = False
+            Rows((cr + 1) & ":" & (cr + 1 + cn - 2)).Insert Shift:=xlDown
+            For ci = 0 To cn - 1 Step 1
+                Range(tcl & cr + ci).Value = ctx(ci)
+            Next ci
+        End If
+    Next cr
+End Sub
+
+
+
+'Sample data
+'Start
+'a1,a2,a3
+'b1,b2   2
+'c1,c2,c3
+'d1 4
+'e1,e2,e3,e4
+'end
+
+'検索方法下から上に
+'複数だったら追加。
+
+'学習項目
+'・ボタンからマクロ起動
+'・文字列のスプリット（カンマ）、変数で受ける
+'・行挿入
+'・ある列を上から下まで検索（シートの最下→最近上→シートの最上→最近下）
+
